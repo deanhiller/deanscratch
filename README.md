@@ -1,4 +1,4 @@
-deanscratch
-===========
+Hibernate-example
+=================
 
-scratch repository 
+Hibernate Connection with postgres database
