@@ -13,3 +13,6 @@ tmp/
 /.metadata
 /data/
 /.gradle/
+*.iml
+*.iws
+.DS_Store

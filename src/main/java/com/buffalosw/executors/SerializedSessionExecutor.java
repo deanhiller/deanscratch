@@ -16,6 +16,11 @@ public class SerializedSessionExecutor implements Executor {
     private List<Executor> availableExecutors = new ArrayList<>();
     private List<Executor> runningExecutors = new ArrayList<>();
 
+    public SerializedSessionExecutor(List<Executor> executors) {
+        this.numThreads = executors.size();
+        availableExecutors = executors;
+    }
+
     public SerializedSessionExecutor(int numThreads) {
         this.numThreads = numThreads;
         for(int i = 0; i < numThreads; i++) {
@@ -53,12 +58,18 @@ public class SerializedSessionExecutor implements Executor {
         List<Runnable> queue = runnables;
         for(int i = 0; i < queue.size(); i++) {
             Runnable runnable = queue.get(i);
-            if(!(runnable instanceof SessionRunnable))
+            if(!(runnable instanceof SessionRunnable)) {
                 runOnAvailableExecutor(executorToUse, runnable, null);
+                queue.remove(runnable);
+                return;
+            }
             SessionRunnable sessionRunnable = (SessionRunnable)runnable;
             String sessionId = sessionRunnable.getSessionId();
-            if(!currentlyRunningSessions.contains(sessionId))
+            if(!currentlyRunningSessions.contains(sessionId)) {
                 runOnAvailableExecutor(executorToUse, runnable, sessionId);
+                queue.remove(runnable);
+                return;
+            }
         }
     }
 

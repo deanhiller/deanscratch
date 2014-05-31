@@ -1,6 +1,6 @@
 package com.buffalosw.executors;
 
-public interface SessionRunnable {
+public interface SessionRunnable extends Runnable {
 
     public String getSessionId();
 }
